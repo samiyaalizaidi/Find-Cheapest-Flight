@@ -387,6 +387,43 @@ def Delete_Flights():
     text = Label(upper_frame, text="SHH Travelling Agency and Co.", font=("Times New Roman", 40, "bold"), bg='#80c1ff')
     text.place(relx=0.15) # Project title comes here
 
+    midframe = Frame(window,  bg='#80c1ff', bd=10)
+    midframe.place(relx=0.5, rely=0.15, relwidth=0.75, relheight=0.1, anchor='n')
+
+    guide = Label(midframe, text="Please enter the required information.", font=("Times New Roman", 20, "bold"), bg='#80c1ff')
+    guide.place(relx=0.32)
+    
+    newFrame = Frame(window, bg='#80c1ff', bd=10)
+    newFrame.place(relx=0.5, rely=0.30, relwidth=0.75, relheight=0.7, anchor='n')
+
+    from_text = Label(newFrame, text="From: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
+    from_text.place(relx=0.01, relwidth=0.1)
+
+    name_from = Entry(newFrame, font=40)
+    name_from.place(relwidth=0.25, relheight=0.12, relx=0.13)
+
+    to_text = Label(newFrame, text="To: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
+    to_text.place(relx=0.45, relwidth=0.1)
+
+    name_to = Entry(newFrame, font=40)
+    name_to.place(relwidth=0.25, relheight=0.12, relx=0.55)
+
+    airline_text = Label(newFrame, text="Airline: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
+    airline_text.place(relx=0, relwidth=0.1, rely=0.3)
+
+    name_airline = Entry(newFrame, font=40)
+    name_airline.place(relwidth=0.25, relheight=0.12, relx=0.13, rely=0.3)
+
+    price_text = Label(newFrame, text="Price: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
+    price_text.place(relx=0.435, relwidth=0.1, rely=0.3)
+
+    name_airline = Entry(newFrame, font=40)
+    name_airline.place(relwidth=0.25, relheight=0.12, relx=0.55, rely=0.3)
+
+    delete_button = Button(newFrame, text="Delete", font=("Times New Roman", 20, "bold"),  bg='#C704B8')
+    delete_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
+
+
 # Making Frames for the parent window
 upper_frame = Frame(window, bg='#80c1ff', bd=10)
 upper_frame.place(relx=0.5, rely=0.02, relwidth=0.75, relheight=0.15, anchor='n') # for title
