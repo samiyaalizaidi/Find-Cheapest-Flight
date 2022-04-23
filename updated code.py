@@ -57,6 +57,13 @@ def AddEdges(G, edges):
         G[j] = lst
     return(G)
 
+def update(Graph,node1,ifo,bifo):
+    for i in Graph[node1]:
+        if i == ifo:
+            Graph[node1].remove(i)
+            Graph[node1].append(bifo)
+            return(Graph)
+
 #file loader
 def fileName():
   f = open("Dataset.txt", "r")
@@ -267,7 +274,7 @@ def Finding_Flights():
     # converts the list into a proper output.
     def format_function(string):
         length = len(string)
-        answer = f"{str(length)} possible routes found. \n \n"
+        answer = f"{str(length)} possible route(s) found. \n \n"
         num = 1
         for text in string:
             answer = answer + str(num) + '. ' + text + "\n"
@@ -478,6 +485,73 @@ def Delete_Flights():
     delete_button = Button(newFrame, text="Delete", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: deletion(Graph, name_from.get(), name_to.get(), name_airline.get(), price.get()))
     delete_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
 
+# 4. Updating flights from the database
+def Update_Flights():
+    window = Tk() # Initializes the GUI
+    window.configure(background="#80c1ff") # gives sky blue background color
+    window.title("Delete Flights") # label
+    window.geometry("1200x1000") # sets the size of the window  
+
+    global Graph
+
+    # Functions for this window
+
+    def update_flight(Graph,ifo,bifo):
+        update(Graph,ifo[0],ifo,bifo)
+        ifom = [ifo[1],ifo[0],ifo[2],ifo[3]]
+        bifom = [bifo[1],bifo[0],bifo[2],bifo[3]]
+        update(Graph,ifo[1],ifom,bifom)
+        print(Graph)
+
+    # Making frames for the window
+    upper_frame = Frame(window, bg='#80c1ff', bd=10)
+    upper_frame.place(relx=0.5, rely=0.02, relwidth=0.75, relheight=0.15, anchor='n') # for title
+
+    text = Label(upper_frame, text="SHH Travelling Agency and Co.", font=("Times New Roman", 40, "bold"), bg='#80c1ff')
+    text.place(relx=0.15) # Project title comes here 
+
+    midframe = Frame(window,  bg='#80c1ff', bd=10)
+    midframe.place(relx=0.5, rely=0.15, relwidth=0.75, relheight=0.1, anchor='n')
+
+    guide = Label(midframe, text="Please enter the required information.", font=("Times New Roman", 20, "bold"), bg='#80c1ff')
+    guide.place(relx=0.32)
+    
+    newFrame = Frame(window, bg='#80c1ff', bd=10)
+    newFrame.place(relx=0.5, rely=0.30, relwidth=0.75, relheight=0.7, anchor='n')
+
+    from_text = Label(newFrame, text="From: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
+    from_text.place(relx=0.01, relwidth=0.1)
+
+    name_from = Entry(newFrame, font=40)
+    name_from.place(relwidth=0.25, relheight=0.12, relx=0.13)
+
+    to_text = Label(newFrame, text="To: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
+    to_text.place(relx=0.45, relwidth=0.1)
+
+    name_to = Entry(newFrame, font=40)
+    name_to.place(relwidth=0.25, relheight=0.12, relx=0.55)
+
+    airline_text = Label(newFrame, text="Airline: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
+    airline_text.place(relx=0, relwidth=0.1, rely=0.3)
+
+    name_airline = Entry(newFrame, font=40)
+    name_airline.place(relwidth=0.25, relheight=0.12, relx=0.13, rely=0.3)
+
+    priceOld_text = Label(newFrame, text="Old Price: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
+    priceOld_text.place(relx=0.40, relwidth=0.15, rely=0.3)
+
+    priceOld = Entry(newFrame, font=40)
+    priceOld.place(relwidth=0.25, relheight=0.12, relx=0.55, rely=0.3)
+
+    priceNew_text =  Label(newFrame, text="New Price: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
+    priceNew_text.place(relx=0, relwidth=0.13, rely=0.6)
+
+    priceNew = Entry(newFrame, font=40)
+    priceNew.place(relwidth=0.25, relheight=0.12, relx=0.13, rely=0.6)
+
+    update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8')
+    update_button.place(relwidth=0.2, relheight=0.12, relx=0.55, rely=0.6)
+
 # Making Frames for the parent window
 upper_frame = Frame(window, bg='#80c1ff', bd=10)
 upper_frame.place(relx=0.5, rely=0.02, relwidth=0.75, relheight=0.15, anchor='n') # for title
@@ -503,4 +577,7 @@ addFlights.place(relwidth=0.2, relheight=0.1, relx=0.40)
 removeFlights = Button(button_frame, text="Remove Flights", bg='#FF5733', font=("Times New Roman", 20, "bold"), command= lambda: Delete_Flights())
 removeFlights.place(relwidth=0.23, relheight=0.1, relx=0.65)
 
+updateFlights = Button(button_frame, text="Update Flights", bg='#FF5733', font=("Times New Roman", 20, "bold"), command=lambda: Update_Flights())
+updateFlights.place(relwidth=0.23, relheight=0.1, relx=0.15, rely=0.2)
+ 
 window.mainloop() # terminates the execution of GUI
