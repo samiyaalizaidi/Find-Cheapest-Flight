@@ -36,6 +36,18 @@ def AddVertex(graph, label):
   graph[label] = []
   return(graph)
 
+def Add_new_vertex(Graph,node):
+    if node not in Graph:
+        Graph[node] = []
+        return(Graph)
+
+def del_edge(Graph,node1,infom):
+    if node1 in Graph:
+        for i in Graph[node1]:
+            if i == infom:
+                Graph[node1].remove(i)
+                return(Graph)
+
 def AddEdges(G, edges):
     for j in G:
         lst = []
@@ -330,6 +342,30 @@ def Add_New_Flights():
     window.title("Add New Flights") # label
     window.geometry("1200x1000") # sets the size of the window 
     
+    global Graph
+
+    # Functions for this window
+
+    # input in this form:
+    # info = ["Bangkok","Sydney","Thai Airways","200"]
+
+    def Add_flight(Graph,info):
+        Add_new_vertex(Graph,info[0])
+        Add_new_vertex(Graph,info[1])
+        x = fileName()
+        binfo = [info[1],info[0],info[2],info[3]]
+        x.append(info)
+        x.append(binfo)
+        AddEdges(Graph,x)
+        # print(Graph)
+
+    def New_Flights(graph, current, dest, airline, cost):
+        current = current.capitalize()
+        dest = dest.capitalize()
+        airline = airline.capitalize()
+        lst = [current, dest, airline, str(cost)]
+        Add_flight(graph, lst)
+
     # Making frames for the window
     upper_frame = Frame(window, bg='#80c1ff', bd=10)
     upper_frame.place(relx=0.5, rely=0.02, relwidth=0.75, relheight=0.15, anchor='n') # for title
@@ -367,10 +403,10 @@ def Add_New_Flights():
     price_text = Label(newFrame, text="Price: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
     price_text.place(relx=0.435, relwidth=0.1, rely=0.3)
 
-    name_airline = Entry(newFrame, font=40)
-    name_airline.place(relwidth=0.25, relheight=0.12, relx=0.55, rely=0.3)
+    price = Entry(newFrame, font=40)
+    price.place(relwidth=0.25, relheight=0.12, relx=0.55, rely=0.3)
 
-    update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8')
+    update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: New_Flights(Graph, name_from.get(), name_to.get(), name_airline.get(), price.get()))
     update_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
 
 # 3. Deleting flights from the database
@@ -379,6 +415,25 @@ def Delete_Flights():
     window.configure(background="#80c1ff") # gives sky blue background color
     window.title("Delete Flights") # label
     window.geometry("1200x1000") # sets the size of the window  
+
+    global Graph
+
+    # Functions for this window
+
+    # input in this form:
+    # infom = ["Bangkok","Sydney","Thai Airways","200"]
+    def delete_flight(Graph,infom):
+        del_edge(Graph,infom[0],infom)
+        binfom = [infom[1],infom[0],infom[2],infom[3]]
+        del_edge(Graph,infom[1],binfom)
+        print(Graph)
+
+    def deletion(graph, current, dest, airline, cost):
+        current = current.capitalize()
+        dest = dest.capitalize()
+        airline = airline.capitalize()
+        lst = [current, dest, airline, cost]
+        delete_flight(graph, lst)
 
     # Making frames for the window
     upper_frame = Frame(window, bg='#80c1ff', bd=10)
@@ -417,12 +472,11 @@ def Delete_Flights():
     price_text = Label(newFrame, text="Price: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
     price_text.place(relx=0.435, relwidth=0.1, rely=0.3)
 
-    name_airline = Entry(newFrame, font=40)
-    name_airline.place(relwidth=0.25, relheight=0.12, relx=0.55, rely=0.3)
+    price = Entry(newFrame, font=40)
+    price.place(relwidth=0.25, relheight=0.12, relx=0.55, rely=0.3)
 
-    delete_button = Button(newFrame, text="Delete", font=("Times New Roman", 20, "bold"),  bg='#C704B8')
+    delete_button = Button(newFrame, text="Delete", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: deletion(Graph, name_from.get(), name_to.get(), name_airline.get(), price.get()))
     delete_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
-
 
 # Making Frames for the parent window
 upper_frame = Frame(window, bg='#80c1ff', bd=10)
