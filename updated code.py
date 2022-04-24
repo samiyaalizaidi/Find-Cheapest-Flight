@@ -264,6 +264,17 @@ window.geometry("1200x1000") # sets the size of the window
 
 # making functions for the new windows
 
+# Helper function
+def get_capital(word):
+    word = word.split(" ")
+    if len(word) > 1:
+        ans = ''
+        for i in range(len(word)):
+            ans += word[i].capitalize() + " "
+        return ans.rstrip()
+    else:
+        return word[0].capitalize()
+
 # 1. Finding Cheapest Flights
 def Finding_Flights():
     window = Tk() # Initializes the GUI
@@ -364,15 +375,19 @@ def Add_New_Flights():
         x.append(info)
         x.append(binfo)
         AddEdges(Graph,x)
-        # print(Graph)
+        # print(Graph)    
 
     def New_Flights(graph, current, dest, airline, cost):
-        current = current.capitalize()
-        dest = dest.capitalize()
-        airline = airline.capitalize()
-        lst = [current, dest, airline, str(cost)]
-        Add_flight(graph, lst)
-
+        try:
+            current = get_capital(current)
+            dest = get_capital(dest)
+            airline = get_capital(airline)
+            lst = [current, dest, airline, str(cost)]
+            Add_flight(graph, lst)
+        # this will give an output if program crashes        
+        except:
+            errorMessage['text'] = "There was a problem retrieving that information. Please try again later."
+    
     # Making frames for the window
     upper_frame = Frame(window, bg='#80c1ff', bd=10)
     upper_frame.place(relx=0.5, rely=0.02, relwidth=0.75, relheight=0.15, anchor='n') # for title
@@ -387,7 +402,7 @@ def Add_New_Flights():
     guide.place(relx=0.32)
     
     newFrame = Frame(window, bg='#80c1ff', bd=10)
-    newFrame.place(relx=0.5, rely=0.30, relwidth=0.75, relheight=0.7, anchor='n')
+    newFrame.place(relx=0.5, rely=0.30, relwidth=0.75, relheight=0.75, anchor='n')
 
     from_text = Label(newFrame, text="From: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
     from_text.place(relx=0.01, relwidth=0.1)
@@ -416,6 +431,9 @@ def Add_New_Flights():
     update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: New_Flights(Graph, name_from.get(), name_to.get(), name_airline.get(), price.get()))
     update_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
 
+    errorMessage = Label(newFrame, font=("Times New Roman", 15, "bold"), bg='#80c1ff', foreground="#F50000")
+    errorMessage.place(relx=0.1, rely=0.68)
+
 # 3. Deleting flights from the database
 def Delete_Flights():
     window = Tk() # Initializes the GUI
@@ -436,11 +454,22 @@ def Delete_Flights():
         print(Graph)
 
     def deletion(graph, current, dest, airline, cost):
-        current = current.capitalize()
-        dest = dest.capitalize()
-        airline = airline.capitalize()
-        lst = [current, dest, airline, cost]
-        delete_flight(graph, lst)
+        try:
+            current = get_capital(current)
+            dest = get_capital(dest)
+            airline = get_capital(airline)
+
+            # give an error if the flights dont exist
+
+            if current not in graph or dest not in graph:
+                errorMessage['text'] = "No such flights found."
+            else:
+                lst = [current, dest, airline, str(cost)]
+                delete_flight(graph, lst)
+
+        # give an output if the program crashes
+        except:
+            errorMessage['text'] = "There was a problem. Please try again later."
 
     # Making frames for the window
     upper_frame = Frame(window, bg='#80c1ff', bd=10)
@@ -456,7 +485,7 @@ def Delete_Flights():
     guide.place(relx=0.32)
     
     newFrame = Frame(window, bg='#80c1ff', bd=10)
-    newFrame.place(relx=0.5, rely=0.30, relwidth=0.75, relheight=0.7, anchor='n')
+    newFrame.place(relx=0.5, rely=0.30, relwidth=0.75, relheight=0.75, anchor='n')
 
     from_text = Label(newFrame, text="From: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
     from_text.place(relx=0.01, relwidth=0.1)
@@ -485,6 +514,9 @@ def Delete_Flights():
     delete_button = Button(newFrame, text="Delete", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: deletion(Graph, name_from.get(), name_to.get(), name_airline.get(), price.get()))
     delete_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
 
+    errorMessage = Label(newFrame, font=("Times New Roman", 15, "bold"), bg='#80c1ff', foreground="#F50000")
+    errorMessage.place(relx=0.1, rely=0.68)
+
 # 4. Updating flights from the database
 def Update_Flights():
     window = Tk() # Initializes the GUI
@@ -496,12 +528,35 @@ def Update_Flights():
 
     # Functions for this window
 
+    # input in this form:
+    # ifo = ["Karachi", "Dubai", "Fly Dubai", "175"]
+    # bifo = ["Karachi", "Dubai", "Fly Dubai", "200"]
+    # ifo --> old, bifo --> new
     def update_flight(Graph,ifo,bifo):
         update(Graph,ifo[0],ifo,bifo)
         ifom = [ifo[1],ifo[0],ifo[2],ifo[3]]
         bifom = [bifo[1],bifo[0],bifo[2],bifo[3]]
         update(Graph,ifo[1],ifom,bifom)
         print(Graph)
+
+    def price_Update(graph, current, dest, airline, old, new):
+        try:
+            current = get_capital(current)
+            dest = get_capital(dest)
+            airline = get_capital(airline)
+
+            # make sure the nodes exist in the graph
+
+            if current not in graph or dest not in graph or airline not in graph:
+                errorMessage['text'] = "No such flights found."
+            else:
+                old_list = [current, dest, airline, str(old)]
+                new_list= [current, dest, airline, str(new)]
+                update_flight(graph, old_list, new_list)
+
+        # gives an output even if the program crashes.
+        except:
+            errorMessage['text'] = "There was a problem retrieving that data. Please try again later."
 
     # Making frames for the window
     upper_frame = Frame(window, bg='#80c1ff', bd=10)
@@ -517,7 +572,7 @@ def Update_Flights():
     guide.place(relx=0.32)
     
     newFrame = Frame(window, bg='#80c1ff', bd=10)
-    newFrame.place(relx=0.5, rely=0.30, relwidth=0.75, relheight=0.7, anchor='n')
+    newFrame.place(relx=0.5, rely=0.30, relwidth=0.75, relheight=0.75, anchor='n')
 
     from_text = Label(newFrame, text="From: ", font=("Times New Roman", 22, "bold"), bg='#80c1ff')
     from_text.place(relx=0.01, relwidth=0.1)
@@ -549,8 +604,11 @@ def Update_Flights():
     priceNew = Entry(newFrame, font=40)
     priceNew.place(relwidth=0.25, relheight=0.12, relx=0.13, rely=0.6)
 
-    update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8')
+    update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: price_Update(Graph, name_from.get(), name_to.get(), name_airline.get(), priceOld.get(), priceNew.get()))
     update_button.place(relwidth=0.2, relheight=0.12, relx=0.55, rely=0.6)
+
+    errorMessage = Label(newFrame, font=("Times New Roman", 15, "bold"), bg='#80c1ff', foreground="#F50000")
+    errorMessage.place(relx=0.1, rely=0.68)
 
 # Making Frames for the parent window
 upper_frame = Frame(window, bg='#80c1ff', bd=10)
