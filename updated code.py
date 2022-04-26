@@ -212,50 +212,6 @@ def SortAndPrint(graph, start, end):
     print(answer)
     return answer
 
-
-# # converts the list into a proper output.
-# def format_function(string):
-#     length = len(string)
-#     answer = f"{str(length)} possible routes found. \n \n"
-#     num = 1
-#     for text in string:
-#         answer = answer + str(num) + '. ' + text + "\n"
-#         num += 1
-#     return answer
-# # print(format_function(x))
-
-# # Takes information from the 'Enter' button and uses it to generate output.
-# def ActualWork(start, end, graph):
-#     try:
-#         start = start.capitalize()
-#         end = end.capitalize()
-
-#         # returns error if a node (city) is not in the database.
-
-#         if start not in Graph or end not in Graph:
-#             label["foreground"] = "#E61F0E" # sets the text color to red
-#             label['text'] = "Oops! No Current Flight Available."
-
-#         elif start == end:
-#             label["foreground"] = "#E61F0E" # sets the text color to red
-#             label['text'] = "Invalid Information."
-
-#         else:
-#             # gives the output in the form of a list
-#             x = SortAndPrint(graph, start, end)
-#             # assigns the formatted string to the GUI output
-#             label["foreground"] = "#020C01"
-#             label['text'] = format_function(x)
-
-#     # this will give an output if there is an error / program crashes
-#     except:
-#         label["foreground"] = "#E61F0E" # sets the text color to red
-#         label["text"] = "There was a problem retrieving that information. Please try again later."
-
-# # 
-# Helper functions for the shortest path code ends here
-# 
-
 # Making the parent display window
 window = Tk() # Initializes the GUI
 window.configure(background="#80c1ff") # gives sky blue background color
@@ -275,6 +231,45 @@ def get_capital(word):
     else:
         return word[0].capitalize()
 
+# Finding_Flights() functions
+
+# converts the list into a proper output.
+def format_function(string):
+    length = len(string)
+    answer = f"{str(length)} possible route(s) found. \n \n"
+    num = 1
+    for text in string:
+        answer = answer + str(num) + '. ' + text + "\n"
+        num += 1
+    return answer
+
+def ActualWork(start, end, graph, label):
+    try:
+        start = start.capitalize()
+        end = end.capitalize()
+
+        # returns error if a node (city) is not in the database.
+
+        if start not in Graph or end not in Graph:
+            label["foreground"] = "#E61F0E" # sets the text color to red
+            label['text'] = "Oops! No Current Flight Available."
+
+        elif start == end:
+            label["foreground"] = "#E61F0E" # sets the text color to red
+            label['text'] = "Invalid Information."
+
+        else:
+            # gives the output in the form of a list
+            x = SortAndPrint(graph, start, end)
+            # assigns the formatted string to the GUI output
+            label["foreground"] = "#020C01"
+            label['text'] = format_function(x)
+
+    # this will give an output if there is an error / program crashes
+    except:
+        label["foreground"] = "#E61F0E" # sets the text color to red
+        label["text"] = "There was a problem retrieving that information. Please try again later."
+
 # 1. Finding Cheapest Flights
 def Finding_Flights():
     window = Tk() # Initializes the GUI
@@ -282,45 +277,7 @@ def Finding_Flights():
     window.title("Get Plane Tickets") # label
     window.geometry("1200x1000") # sets the size of the window 
     global Graph
-    # converts the list into a proper output.
-    def format_function(string):
-        length = len(string)
-        answer = f"{str(length)} possible route(s) found. \n \n"
-        num = 1
-        for text in string:
-            answer = answer + str(num) + '. ' + text + "\n"
-            num += 1
-        return answer
-    # print(format_function(x))
 
-    # Takes information from the 'Enter' button and uses it to generate output.
-    def ActualWork(start, end, graph):
-        try:
-            start = start.capitalize()
-            end = end.capitalize()
-
-            # returns error if a node (city) is not in the database.
-
-            if start not in Graph or end not in Graph:
-                label["foreground"] = "#E61F0E" # sets the text color to red
-                label['text'] = "Oops! No Current Flight Available."
-
-            elif start == end:
-                label["foreground"] = "#E61F0E" # sets the text color to red
-                label['text'] = "Invalid Information."
-
-            else:
-                # gives the output in the form of a list
-                x = SortAndPrint(graph, start, end)
-                # assigns the formatted string to the GUI output
-                label["foreground"] = "#020C01"
-                label['text'] = format_function(x)
-
-        # this will give an output if there is an error / program crashes
-        except:
-            label["foreground"] = "#E61F0E" # sets the text color to red
-            label["text"] = "There was a problem retrieving that information. Please try again later." 
-            
     upper_frame = Frame(window, bg='#80c1ff', bd=10)
     upper_frame.place(relx=0.5, rely=0.02, relwidth=0.75, relheight=0.15, anchor='n') # for title
 
@@ -342,16 +299,41 @@ def Finding_Flights():
     entry_to = Entry(frame, font=50)
     entry_to.place(relwidth=0.28, relheight=1, relx=0.5) # for text entry --> Current Location
     
-    button = Button(frame, text="ENTER", font=("Times New Roman", 20, 'bold'), command=lambda: ActualWork(entry_from.get(), entry_to.get(), Graph), bg='#FF5733')
-    button.place(relwidth=0.2, relheight=1, relx=0.8) # to press the button ---> processes the information entered in the text boxes.
-
     lower_frame = Frame(window, bg='#80c1ff', bd=10)
     lower_frame.place(relx=0.5, rely=0.3, relwidth=0.75, relheight=0.6, anchor='n') # route will appear here
 
     label = Label(lower_frame, bg='#80c1ff', font=("Times New Roman", 20, 'bold'), anchor='n', justify='left')
     label.place(relx=0, rely=0) # for the route
 
+    button = Button(frame, text="ENTER", font=("Times New Roman", 20, 'bold'), command=lambda: ActualWork(entry_from.get(), entry_to.get(), Graph, label), bg='#FF5733')
+    button.place(relwidth=0.2, relheight=1, relx=0.8) # to press the button ---> processes the information entered in the text boxes.
+
     window.mainloop() # terminates the execution of gui 
+
+# Add_New_Flights() functions
+# input in this form:
+# info = ["Bangkok","Sydney","Thai Airways","200"]
+
+def Add_flight(Graph,info):
+    Add_new_vertex(Graph,info[0])
+    Add_new_vertex(Graph,info[1])
+    x = fileName()
+    binfo = [info[1],info[0],info[2],info[3]]
+    x.append(info)
+    x.append(binfo)
+    AddEdges(Graph,x)
+    # print(Graph)    
+
+def New_Flights(graph, current, dest, airline, cost, errorMessage):
+    try:
+        current = get_capital(current)
+        dest = get_capital(dest)
+        airline = get_capital(airline)
+        lst = [current, dest, airline, str(cost)]
+        Add_flight(graph, lst)
+    # this will give an output if program crashes        
+    except:
+        errorMessage['text'] = "There was a problem retrieving that information. Please try again later."
 
 # 2. Adding flights to the database
 def Add_New_Flights():
@@ -362,32 +344,6 @@ def Add_New_Flights():
     
     global Graph
 
-    # Functions for this window
-
-    # input in this form:
-    # info = ["Bangkok","Sydney","Thai Airways","200"]
-
-    def Add_flight(Graph,info):
-        Add_new_vertex(Graph,info[0])
-        Add_new_vertex(Graph,info[1])
-        x = fileName()
-        binfo = [info[1],info[0],info[2],info[3]]
-        x.append(info)
-        x.append(binfo)
-        AddEdges(Graph,x)
-        # print(Graph)    
-
-    def New_Flights(graph, current, dest, airline, cost):
-        try:
-            current = get_capital(current)
-            dest = get_capital(dest)
-            airline = get_capital(airline)
-            lst = [current, dest, airline, str(cost)]
-            Add_flight(graph, lst)
-        # this will give an output if program crashes        
-        except:
-            errorMessage['text'] = "There was a problem retrieving that information. Please try again later."
-    
     # Making frames for the window
     upper_frame = Frame(window, bg='#80c1ff', bd=10)
     upper_frame.place(relx=0.5, rely=0.02, relwidth=0.75, relheight=0.15, anchor='n') # for title
@@ -428,11 +384,39 @@ def Add_New_Flights():
     price = Entry(newFrame, font=40)
     price.place(relwidth=0.25, relheight=0.12, relx=0.55, rely=0.3)
 
-    update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: New_Flights(Graph, name_from.get(), name_to.get(), name_airline.get(), price.get()))
-    update_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
-
     errorMessage = Label(newFrame, font=("Times New Roman", 15, "bold"), bg='#80c1ff', foreground="#F50000")
     errorMessage.place(relx=0.1, rely=0.68)
+
+    update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: New_Flights(Graph, name_from.get(), name_to.get(), name_airline.get(), price.get(), errorMessage))
+    update_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
+
+# Delete_Flights() functions:
+
+# input in this form:
+# infom = ["Bangkok","Sydney","Thai Airways","200"]
+def delete_flight(Graph,infom):
+    del_edge(Graph,infom[0],infom)
+    binfom = [infom[1],infom[0],infom[2],infom[3]]
+    del_edge(Graph,infom[1],binfom)
+    print(Graph)
+
+def deletion(graph, current, dest, airline, cost, errorMessage):
+    try:
+        current = get_capital(current)
+        dest = get_capital(dest)
+        airline = get_capital(airline)
+
+        # give an error if the flights dont exist
+        print(graph)
+        if current not in graph or dest not in graph:
+            errorMessage['text'] = "No such flights found."
+        else:
+            lst = [current, dest, airline, str(cost)]
+            delete_flight(graph, lst)
+
+    # give an output if the program crashes
+    except:
+        errorMessage['text'] = "There was a problem. Please try again later."
 
 # 3. Deleting flights from the database
 def Delete_Flights():
@@ -442,34 +426,6 @@ def Delete_Flights():
     window.geometry("1200x1000") # sets the size of the window  
 
     global Graph
-
-    # Functions for this window
-
-    # input in this form:
-    # infom = ["Bangkok","Sydney","Thai Airways","200"]
-    def delete_flight(Graph,infom):
-        del_edge(Graph,infom[0],infom)
-        binfom = [infom[1],infom[0],infom[2],infom[3]]
-        del_edge(Graph,infom[1],binfom)
-        print(Graph)
-
-    def deletion(graph, current, dest, airline, cost):
-        try:
-            current = get_capital(current)
-            dest = get_capital(dest)
-            airline = get_capital(airline)
-
-            # give an error if the flights dont exist
-
-            if current not in graph or dest not in graph:
-                errorMessage['text'] = "No such flights found."
-            else:
-                lst = [current, dest, airline, str(cost)]
-                delete_flight(graph, lst)
-
-        # give an output if the program crashes
-        except:
-            errorMessage['text'] = "There was a problem. Please try again later."
 
     # Making frames for the window
     upper_frame = Frame(window, bg='#80c1ff', bd=10)
@@ -511,11 +467,42 @@ def Delete_Flights():
     price = Entry(newFrame, font=40)
     price.place(relwidth=0.25, relheight=0.12, relx=0.55, rely=0.3)
 
-    delete_button = Button(newFrame, text="Delete", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: deletion(Graph, name_from.get(), name_to.get(), name_airline.get(), price.get()))
-    delete_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
-
     errorMessage = Label(newFrame, font=("Times New Roman", 15, "bold"), bg='#80c1ff', foreground="#F50000")
     errorMessage.place(relx=0.1, rely=0.68)
+    
+    delete_button = Button(newFrame, text="Delete", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: deletion(Graph, name_from.get(), name_to.get(), name_airline.get(), price.get(), errorMessage))
+    delete_button.place(relwidth=0.2, relheight=0.12, relx=0.37, rely=0.5)
+
+# Update_Flights() functions
+# input in this form:
+# ifo = ["Karachi", "Dubai", "Fly Dubai", "175"]
+# bifo = ["Karachi", "Dubai", "Fly Dubai", "200"]
+# ifo --> old, bifo --> new
+def update_flight(Graph,ifo,bifo):
+    update(Graph,ifo[0],ifo,bifo)
+    ifom = [ifo[1],ifo[0],ifo[2],ifo[3]]
+    bifom = [bifo[1],bifo[0],bifo[2],bifo[3]]
+    update(Graph,ifo[1],ifom,bifom)
+    print(Graph)
+
+def price_Update(graph, current, dest, airline, old, new, errorMessage):
+    try:
+        current = get_capital(current)
+        dest = get_capital(dest)
+        airline = get_capital(airline)
+
+        # make sure the nodes exist in the graph
+        print(graph)
+        if current not in graph or dest not in graph:
+            errorMessage['text'] = "No such flights found."
+        else:
+            old_list = [current, dest, airline, str(old)]
+            new_list= [current, dest, airline, str(new)]
+            update_flight(graph, old_list, new_list)
+
+    # gives an output even if the program crashes.
+    except:
+        errorMessage['text'] = "There was a problem retrieving that data. Please try again later."
 
 # 4. Updating flights from the database
 def Update_Flights():
@@ -525,38 +512,6 @@ def Update_Flights():
     window.geometry("1200x1000") # sets the size of the window  
 
     global Graph
-
-    # Functions for this window
-
-    # input in this form:
-    # ifo = ["Karachi", "Dubai", "Fly Dubai", "175"]
-    # bifo = ["Karachi", "Dubai", "Fly Dubai", "200"]
-    # ifo --> old, bifo --> new
-    def update_flight(Graph,ifo,bifo):
-        update(Graph,ifo[0],ifo,bifo)
-        ifom = [ifo[1],ifo[0],ifo[2],ifo[3]]
-        bifom = [bifo[1],bifo[0],bifo[2],bifo[3]]
-        update(Graph,ifo[1],ifom,bifom)
-        print(Graph)
-
-    def price_Update(graph, current, dest, airline, old, new):
-        try:
-            current = get_capital(current)
-            dest = get_capital(dest)
-            airline = get_capital(airline)
-
-            # make sure the nodes exist in the graph
-
-            if current not in graph or dest not in graph or airline not in graph:
-                errorMessage['text'] = "No such flights found."
-            else:
-                old_list = [current, dest, airline, str(old)]
-                new_list= [current, dest, airline, str(new)]
-                update_flight(graph, old_list, new_list)
-
-        # gives an output even if the program crashes.
-        except:
-            errorMessage['text'] = "There was a problem retrieving that data. Please try again later."
 
     # Making frames for the window
     upper_frame = Frame(window, bg='#80c1ff', bd=10)
@@ -604,11 +559,11 @@ def Update_Flights():
     priceNew = Entry(newFrame, font=40)
     priceNew.place(relwidth=0.25, relheight=0.12, relx=0.13, rely=0.6)
 
-    update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: price_Update(Graph, name_from.get(), name_to.get(), name_airline.get(), priceOld.get(), priceNew.get()))
-    update_button.place(relwidth=0.2, relheight=0.12, relx=0.55, rely=0.6)
-
     errorMessage = Label(newFrame, font=("Times New Roman", 15, "bold"), bg='#80c1ff', foreground="#F50000")
     errorMessage.place(relx=0.1, rely=0.68)
+    
+    update_button = Button(newFrame, text="Update", font=("Times New Roman", 20, "bold"),  bg='#C704B8', command=lambda: price_Update(Graph, name_from.get(), name_to.get(), name_airline.get(), priceOld.get(), priceNew.get(), errorMessage))
+    update_button.place(relwidth=0.2, relheight=0.12, relx=0.55, rely=0.6)
 
 # Making Frames for the parent window
 upper_frame = Frame(window, bg='#80c1ff', bd=10)
