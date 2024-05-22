@@ -1,0 +1,20 @@
+Karachi,Dubai,Emirates,200
+Karachi,Dubai,Fly Dubai,175
+Karachi,Istanbul,Turkish Airlines,400
+Karachi,Bangkok,Thai Airways,325
+Dubai,Karachi,Emirates,50
+Dubai,Karachi,Fly Dubai,75
+Dubai,Istanbul,Emirates,175
+Dubai,Istanbul,Turkish Airlines,150
+Dubai,Bangkok,Emirates,225
+Dubai,Bangkok,Thai Airways,200
+Istanbul,Dubai,Turkish Airlines,250
+Istanbul,Dubai,Emirates,275
+Istanbul,Karachi,Turkish Airlines,325
+Istanbul,Bangkok,Turkish Airlines,425
+Istanbul,Bangkok,Thai Airways,375
+Bangkok,Istanbul,Turkish Airlines,350
+Bangkok,Istanbul,Thai Airways,325
+Bangkok,Dubai,Thai Airways,300
+Bangkok,Dubai,Emirates,250
+Bangkok,Karachi,Thai Airways,300
